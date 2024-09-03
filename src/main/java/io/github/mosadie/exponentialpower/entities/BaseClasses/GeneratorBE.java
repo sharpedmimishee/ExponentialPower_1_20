@@ -1,5 +1,6 @@
 package io.github.mosadie.exponentialpower.entities.BaseClasses;
 
+import com.buuz135.industrial.item.infinity.InfinityEnergyStorage;
 import io.github.mosadie.exponentialpower.Config;
 import io.github.mosadie.exponentialpower.ExponentialPower;
 import io.github.mosadie.exponentialpower.container.ContainerEnderGeneratorBE;
@@ -25,6 +26,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,6 +39,7 @@ public class GeneratorBE extends BaseContainerBlockEntity implements ICapability
 		REGULAR,
 		ADVANCED,
 	}
+
 	public final GeneratorTier tier;
 
 	public double currentOutput = 0;
@@ -69,7 +72,7 @@ public class GeneratorBE extends BaseContainerBlockEntity implements ICapability
 		ListTag nbtTagList = new ListTag();
 		int slotsSize = getContainerSize();
 		for (int i = 0; i < slotsSize; i++) {
-			if (!getItem(i).isEmpty())  {
+			if (!getItem(i).isEmpty()) {
 				CompoundTag itemTag = new CompoundTag();
 				itemTag.putInt("Slot", i);
 				getItem(i).save(itemTag);
@@ -89,7 +92,7 @@ public class GeneratorBE extends BaseContainerBlockEntity implements ICapability
 		if (nbt.contains("Items", Tag.TAG_COMPOUND)) { // Load older NBT item structure.
 			ExponentialPower.LOGGER.warn("Upgrading old NBT item tag on save!");
 			tagList = nbt.getCompound("Items").getList("Items", Tag.TAG_COMPOUND);
-		} else 	if (nbt.contains("Items", Tag.TAG_LIST)) {
+		} else if (nbt.contains("Items", Tag.TAG_LIST)) {
 			tagList = nbt.getList("Items", Tag.TAG_COMPOUND);
 		} else {
 			return;
@@ -148,19 +151,27 @@ public class GeneratorBE extends BaseContainerBlockEntity implements ICapability
 				BlockPos targetBlock = getBlockPos().relative(dir);
 
 				BlockEntity blockEntity = level.getBlockEntity(targetBlock);
-				if (blockEntity != null) {
-					if (blockEntity instanceof StorageBE) {
-						StorageBE storage = (StorageBE) blockEntity;
-						energy -= storage.acceptEnergy(energy);
-					}
-					else {
-						blockEntity.getCapability(ForgeCapabilities.ENERGY, dir.getOpposite()).resolve().ifPresent((cap) -> {
-							if (cap.canReceive()) {
-								energy -= cap.receiveEnergy((int) (energy > Integer.MAX_VALUE ? Integer.MAX_VALUE : energy), false);
-							}
-						});
-					}
+				if (blockEntity == null) {
+					continue;
 				}
+
+				if (blockEntity instanceof StorageBE storage) {
+					energy -= storage.acceptEnergy(energy);
+					continue;
+				}
+
+				blockEntity.getCapability(ForgeCapabilities.ENERGY, dir.getOpposite()).resolve().ifPresent((cap) -> {
+					if (!cap.canReceive()) {
+						return;
+					}
+					if (ModList.get().isLoaded("industrialforegoing") && cap instanceof InfinityEnergyStorage<?> infinityCap) {
+						long sendAmount = Math.min(infinityCap.getLongCapacity() - infinityCap.getLongEnergyStored(), Math.min((long) energy, Long.MAX_VALUE));
+						infinityCap.setEnergyStored(infinityCap.getLongEnergyStored() + sendAmount);
+						energy -= sendAmount;
+						return;
+					}
+					energy -= cap.receiveEnergy((int) (energy > Integer.MAX_VALUE ? Integer.MAX_VALUE : energy), false);
+				});
 			}
 		}
 	}

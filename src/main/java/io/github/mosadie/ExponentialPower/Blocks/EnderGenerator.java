@@ -46,7 +46,7 @@ public class EnderGenerator extends Block implements EntityBlock {
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (!level.isClientSide) {
             BlockEntity tileEntity = level.getBlockEntity(pos);
-            if (tileEntity instanceof EnderGeneratorBE) {
+            if (tileEntity instanceof GeneratorBE) {
                 MenuProvider containerProvider = new MenuProvider() {
                     @Override
                     public Component getDisplayName() {

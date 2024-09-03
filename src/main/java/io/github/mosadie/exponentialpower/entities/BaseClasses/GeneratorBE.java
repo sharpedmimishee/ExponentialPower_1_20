@@ -22,9 +22,9 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,7 +58,7 @@ public class GeneratorBE extends BaseContainerBlockEntity implements ICapability
 	@Override
 	@Nonnull
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction f) {
-		if (cap == CapabilityEnergy.ENERGY) return fecOptional.cast();
+		if (cap == ForgeCapabilities.ENERGY) return fecOptional.cast();
 		return super.getCapability(cap, f);
 	}
 
@@ -154,7 +154,7 @@ public class GeneratorBE extends BaseContainerBlockEntity implements ICapability
 						energy -= storage.acceptEnergy(energy);
 					}
 					else {
-						blockEntity.getCapability(CapabilityEnergy.ENERGY, dir.getOpposite()).resolve().ifPresent((cap) -> {
+						blockEntity.getCapability(ForgeCapabilities.ENERGY, dir.getOpposite()).resolve().ifPresent((cap) -> {
 							if (cap.canReceive()) {
 								energy -= cap.receiveEnergy((int) (energy > Integer.MAX_VALUE ? Integer.MAX_VALUE : energy), false);
 							}

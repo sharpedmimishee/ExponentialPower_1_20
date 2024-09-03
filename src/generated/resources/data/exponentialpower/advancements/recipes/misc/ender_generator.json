@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "enderEye": {
+    "endercell": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:ender_eye"
+              "exponentialpower:ender_cell"
             ]
           }
         ]
@@ -15,20 +15,21 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "exponentialpower:ender_cell"
+        "recipe": "exponentialpower:ender_generator"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "enderEye",
+      "endercell",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "exponentialpower:ender_cell"
+      "exponentialpower:ender_generator"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

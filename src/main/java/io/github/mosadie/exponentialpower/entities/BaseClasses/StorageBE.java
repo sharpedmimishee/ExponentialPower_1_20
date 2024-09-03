@@ -11,8 +11,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -66,7 +66,7 @@ public class StorageBE extends BlockEntity implements BlockEntityTicker<StorageB
 	@Override
 	@Nonnull
 	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction dir) {
-		if (cap == CapabilityEnergy.ENERGY) return fecOptional.get((dir != null) ? dir : Direction.UP).cast();
+		if (cap == ForgeCapabilities.ENERGY) return fecOptional.get((dir != null) ? dir : Direction.UP).cast();
 		return super.getCapability(cap, dir);
 	}
 
@@ -100,7 +100,7 @@ public class StorageBE extends BlockEntity implements BlockEntityTicker<StorageB
 						}
 					}
 					else {
-						entity.getCapability(CapabilityEnergy.ENERGY, dir.getOpposite()).ifPresent((cap) -> {
+						entity.getCapability(ForgeCapabilities.ENERGY, dir.getOpposite()).ifPresent((cap) -> {
 							if (cap.canReceive()) {
 								int change = cap.receiveEnergy((int) (energy > Integer.MAX_VALUE ? Integer.MAX_VALUE : energy), false);
 								if (change > 0) {

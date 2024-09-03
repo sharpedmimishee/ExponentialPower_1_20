@@ -7,7 +7,6 @@ import net.minecraft.world.item.Item.Properties;
 public class EnderCell extends Item {
 
 	private final static Properties properties = new Properties()
-			.tab(ItemManager.ITEM_GROUP)
 			.fireResistant()
 			.stacksTo(64);
 

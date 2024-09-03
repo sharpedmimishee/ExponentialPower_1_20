@@ -3,8 +3,9 @@ package io.github.mosadie.exponentialpower.datagen;
 import io.github.mosadie.exponentialpower.ExponentialPower;
 import io.github.mosadie.exponentialpower.setup.Registration;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.item.Items;
@@ -15,15 +16,16 @@ import java.util.function.Consumer;
 
 public class DataRecipes extends RecipeProvider {
 
-    public DataRecipes(DataGenerator generatorIn) {
-        super(generatorIn);
+
+    public DataRecipes(PackOutput output) {
+        super(output);
     }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
+    protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
 //        super.buildCraftingRecipes(p_176532_);
         ExponentialPower.LOGGER.info("Registering Recipes!");
-        ShapedRecipeBuilder.shaped(Registration.ENDER_CELL.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Registration.ENDER_CELL.get())
                 .pattern("DPD")
                 .pattern("nIn")
                 .pattern("DPD")
@@ -35,7 +37,7 @@ public class DataRecipes extends RecipeProvider {
                 .unlockedBy("enderEye", InventoryChangeTrigger.TriggerInstance.hasItems(Items.ENDER_EYE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(Registration.ENDER_GENERATOR.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Registration.ENDER_GENERATOR.get())
                 .pattern("nOD")
                 .pattern("OcO")
                 .pattern("DOn")
@@ -46,7 +48,7 @@ public class DataRecipes extends RecipeProvider {
                 .group("exponentialpower")
                 .unlockedBy("endercell", InventoryChangeTrigger.TriggerInstance.hasItems(Registration.ENDER_CELL.get()))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(Registration.ADV_ENDER_GENERATOR.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Registration.ADV_ENDER_GENERATOR.get())
                 .pattern("DGD")
                 .pattern("GcG")
                 .pattern("DGD")
@@ -57,7 +59,7 @@ public class DataRecipes extends RecipeProvider {
                 .unlockedBy("endergenerator", InventoryChangeTrigger.TriggerInstance.hasItems(Registration.ENDER_GENERATOR.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(Registration.ENDER_STORAGE.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Registration.ENDER_STORAGE.get())
                 .pattern("DOD")
                 .pattern("PcP")
                 .pattern("DOD")
@@ -68,7 +70,7 @@ public class DataRecipes extends RecipeProvider {
                 .group("exponentialpower")
                 .unlockedBy("endercell", InventoryChangeTrigger.TriggerInstance.hasItems(Registration.ENDER_CELL.get()))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(Registration.ADV_ENDER_STORAGE.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Registration.ADV_ENDER_STORAGE.get())
                 .pattern("DSD")
                 .pattern("ScS")
                 .pattern("DSD")

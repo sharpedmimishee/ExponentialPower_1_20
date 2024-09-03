@@ -20,8 +20,7 @@ public class EnderStorageItem extends BlockItem {
 
 	private final static Item.Properties properties = new Item.Properties()
 			.stacksTo(1)
-			.fireResistant()
-			.tab(ItemManager.ITEM_GROUP);
+			.fireResistant();
 
 	public EnderStorageItem(Block block, StorageBE.StorageTier tier) {
 		super(block, properties);

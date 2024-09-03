@@ -15,9 +15,13 @@ import io.github.mosadie.exponentialpower.entities.BaseClasses.StorageBE;
 import io.github.mosadie.exponentialpower.entities.EnderGeneratorBE;
 import io.github.mosadie.exponentialpower.entities.EnderStorageBE;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -27,20 +31,20 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import static io.github.mosadie.exponentialpower.items.ItemManager.ITEM_GROUP;
-
 public class Registration {
 
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ExponentialPower.MODID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ExponentialPower.MODID);
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ExponentialPower.MODID);
     private static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, ExponentialPower.MODID);
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ExponentialPower.MODID);
 
     public static void init() {
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         BLOCK_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        CREATIVE_MODE_TABS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     // Blocks
@@ -55,8 +59,8 @@ public class Registration {
 
     public static final RegistryObject<Item> ENDER_CELL = ITEMS.register("ender_cell", EnderCell::new);
 
-    public static final RegistryObject<Item> ENDER_GENERATOR_ITEM = ITEMS.register("ender_generator", () -> new BlockItem(ENDER_GENERATOR.get(), new Item.Properties().fireResistant().tab(ITEM_GROUP)));
-    public static final RegistryObject<Item> ADV_ENDER_GENERATOR_ITEM = ITEMS.register("advanced_ender_generator", () -> new BlockItem(ADV_ENDER_GENERATOR.get(), new Item.Properties().fireResistant().tab(ITEM_GROUP)));
+    public static final RegistryObject<Item> ENDER_GENERATOR_ITEM = ITEMS.register("ender_generator", () -> new BlockItem(ENDER_GENERATOR.get(), new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> ADV_ENDER_GENERATOR_ITEM = ITEMS.register("advanced_ender_generator", () -> new BlockItem(ADV_ENDER_GENERATOR.get(), new Item.Properties().fireResistant()));
     public static final RegistryObject<Item> ENDER_STORAGE_ITEM = ITEMS.register("ender_storage", () -> new EnderStorageItem(ENDER_STORAGE.get(), StorageBE.StorageTier.REGULAR));
     public static final RegistryObject<Item> ADV_ENDER_STORAGE_ITEM = ITEMS.register("advanced_ender_storage", () -> new EnderStorageItem(ADV_ENDER_STORAGE.get(), StorageBE.StorageTier.ADVANCED));
 
@@ -71,8 +75,23 @@ public class Registration {
 
     public static final RegistryObject<MenuType<ContainerEnderGeneratorBE>> ENDER_GENERATOR_CONTAINER = CONTAINERS.register("ender_generator", () -> IForgeMenuType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
-        Level level = inv.player.getLevel();
+        Level level = inv.player.level();
         GeneratorBE te = (GeneratorBE) level.getBlockEntity(pos);
         return new ContainerEnderGeneratorBE(windowId, inv, te);
     }));
+
+
+    public static final RegistryObject<CreativeModeTab> CREATIVE_MODE_TAB = CREATIVE_MODE_TABS.register("main",
+            () -> CreativeModeTab.builder()
+                    .icon(() -> new ItemStack(Registration.ENDER_CELL.get()))
+                    .title(Component.translatable("itemGroup.exponentialpower"))
+                    .displayItems((var1, output) -> {
+                        output.accept(Registration.ENDER_CELL.get());
+                        output.accept(Registration.ENDER_GENERATOR_ITEM.get());
+                        output.accept(Registration.ADV_ENDER_GENERATOR_ITEM.get());
+                        output.accept(Registration.ENDER_STORAGE_ITEM.get());
+                        output.accept(Registration.ADV_ENDER_STORAGE_ITEM.get());
+                    })
+                    .build()
+    );
 }

@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[41,)"
+loaderVersion="[47,)"
 issueTrackerURL="https://github.com/MoSadie/ExponentialPower/issues"
 license="GNU LGPL v3"
 logoFile="modIcon.png"
@@ -16,12 +16,12 @@ logoFile="modIcon.png"
 [[dependencies.exponentialpower]]
     modId="forge"
     mandatory=true
-    versionRange="[41,)"
+    versionRange="[47,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.exponentialpower]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="[1.20,)"
     ordering="NONE"
     side="BOTH"

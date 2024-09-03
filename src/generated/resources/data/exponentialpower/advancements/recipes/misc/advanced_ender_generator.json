@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "enderstorage": {
+    "endergenerator": {
       "conditions": {
         "items": [
           {
             "items": [
-              "exponentialpower:ender_storage"
+              "exponentialpower:ender_generator"
             ]
           }
         ]
@@ -15,20 +15,21 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "exponentialpower:advanced_ender_storage"
+        "recipe": "exponentialpower:advanced_ender_generator"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "enderstorage",
+      "endergenerator",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "exponentialpower:advanced_ender_storage"
+      "exponentialpower:advanced_ender_generator"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -2,14 +2,14 @@ package io.github.mosadie.exponentialpower.datagen;
 
 import io.github.mosadie.exponentialpower.ExponentialPower;
 import io.github.mosadie.exponentialpower.setup.Registration;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class DataBlockStates extends BlockStateProvider {
 
-    public DataBlockStates(DataGenerator gen, ExistingFileHelper existingFileHelper) {
-        super(gen, ExponentialPower.MODID, existingFileHelper);
+    public DataBlockStates(PackOutput output, ExistingFileHelper existingFileHelper) {
+        super(output, ExponentialPower.MODID, existingFileHelper);
     }
 
 
